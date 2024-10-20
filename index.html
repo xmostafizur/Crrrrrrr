@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carrom Pool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ffcc00, #ff6699);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .product-list {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 200px;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: 150px;
+            border-radius: 5px;
+        }
+
+        .button {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .buy-now {
+            background-color: #007bff;
+        }
+
+        .submit {
+            background-color: #ff9800;
+        }
+
+        .verify {
+            background-color: #4caf50;
+        }
+
+        .container {
+            display: none;
+            background-color: #e0f7fa;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 50px auto;
+        }
+
+        .container.active {
+            display: block;
+        }
+
+        .payment-container {
+            display: none;
+            background-color: #b71c1c;
+            color: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        .payment-container.active {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .copy-btn {
+            background-color: white;
+            color: #b71c1c;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: #003366;
+        }
+
+        .footer button {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            gap: 10px;
+        }
+
+        .footer img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .footer button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Carrom Pool</h1>
+        <img src="https://i.ibb.co/5FZ6HmM/12559876.png" alt="Verification Logo">
+    </div>
+
+    <div class="product-list">
+        <div class="product">
+            <img src="https://i.ibb.co/d092sxC/Picsart-24-10-20-12-32-24-979.png" alt="Product 1">
+            <h3>Inferno Striker💚</h3>
+            <p>Price: 99 BDT</p>
+            <button class="button buy-now" onclick="showUserIdForm(99)">Buy Now</button>
+        </div>
+        <div class="product">
+            <img src="https://i.ibb.co/4m78c6F/Picsart-24-10-20-12-30-00-471.png" alt="Product 2">
+            <h3>Carrom pass🩵</h3>
+            <p>Price: 157 BDT</p>
+            <button class="button buy-now" onclick="showUserIdForm(157)">Buy Now</button>
+        </div>
+    </div>
+
+    <div class="container" id="userIdForm">
+        <h2>Carrom User ID লিখুন</h2>
+        <input type="text" placeholder="Carrom User ID দিন" id="userIdInput">
+        <button class="button submit" onclick="submitUserId()">Submit</button>
+    </div>
+
+    <div class="payment-container" id="paymentForm">
+        <h2>ট্রানজেকশন আইডি দিন</h2>
+        <input type="text" placeholder="ট্রানজেকশন আইডি দিন" id="transactionId">
+        <p id="amountText"></p>
+        <div class="instructions">
+            <p>• <strong>*167#</strong> ডায়াল করে NAGAD মেনুতে যান।</p>
+            <p>• "Send Money" -এ ক্লিক করুন।</p>
+            <p>• প্রাপক নম্বর: <strong>01581050857</strong>
+                <button class="copy-btn" onclick="copyNumber()">Copy</button>
+            </p>
+        </div>
+        <button class="button verify" onclick="verifyPayment()">VERIFY</button>
+
+        <div class="loading" id="loading">
+            <img src="https://i.ibb.co/bX3CvGg/rotate.gif" alt="Loading">
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://xmostafizur.github.io/Prove-/" target="_blank">
+            <button>
+                <img src="https://i.ibb.co/cCXyNwg/14255746.png" alt="Icon 1">
+                Live prove
+            </button>
+        </a>
+        <a href="https://wa.me/+8801581050857" target="_blank">
+            <button>
+                <img src="https://i.ibb.co/MNDskzJ/2936956.png" alt="Icon 2">
+                Live Chat
+            </button>
+        </a>
+    </div>
+
+    <script>
+        let currentAmount = 0;
+
+        function showUserIdForm(amount) {
+            currentAmount = amount;
+            document.getElementById('userIdForm').classList.add('active');
+        }
+
+        function submitUserId() {
+            const userId = document.getElementById('userIdInput').value;
+            if (userId) {
+                document.getElementById('userIdForm').classList.remove('active');
+                document.getElementById('paymentForm').classList.add('active');
+                document.getElementById('amountText').textContent = `Amount: ${currentAmount} BDT`;
+            } else {
+                alert('Please enter a valid User ID.');
+            }
+        }
+
+        function copyNumber() {
+            navigator.clipboard.writeText('01581050857');
+            alert('Number copied!');
+        }
+
+        function verifyPayment() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            setTimeout(() => {
+                loading.style.display = 'none';
+                alert('Sorry, the transaction ID is incorrect.');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
